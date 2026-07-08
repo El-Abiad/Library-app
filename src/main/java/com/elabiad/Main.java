@@ -12,25 +12,6 @@ import java.util.Scanner;
 public class Main {
     static Scanner input = new Scanner(System.in);
 
-    public static void waitForContinue(){
-        System.out.print("Press Enter to continue....");
-        input.nextLine();
-    }
-    public static int readInt(String message) {
-        while (true) {
-            System.out.print(message);
-
-            try {
-                int value = input.nextInt();
-                input.nextLine();
-                return value;
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
-                input.nextLine();
-            }
-        }
-    }
-
     static void main() {
 
         BookDao dao = new BookDao();
@@ -62,12 +43,12 @@ public class Main {
                     List<Book> books;
                     try{books = dao.getAll();}
                     catch(SQLException e){
-                        System.out.println("Error: SQL error!");
+                        printError("SQL error");
                         waitForContinue();
                         break;
                     }
                     if(books.isEmpty()){
-                        System.out.println("There are no books!");
+                        printError("There are no books");
                         waitForContinue();
                         break;
                     }
@@ -84,28 +65,26 @@ public class Main {
                     Book book;
                     try{book = dao.findById(id);}
                     catch (SQLException e){
-                        System.out.println("Error: SQL error!");
+                        printError("SQL error");
                         waitForContinue();
                         break;
                     }
                     if(book != null)
                         System.out.println(book);
                     else{
-                        System.out.println("Error Could not find the book!");
+                        printError("Could not find the book");
                     }
                     waitForContinue();
                     break;
                 }
                 case 3: { // Add book
-                    System.out.print("Enter book's title: ");
-                    String title = input.nextLine();
-                    System.out.print("Enter book's author: ");
-                    String author = input.nextLine();
+                    String title = readString("title");
+                    String author = readString("author");
                     int publishedYear = readInt("Enter book's Published_Year: ");
                     Book book = new Book(title, author, publishedYear);
                     try{dao.add(book);}
                     catch(SQLException e){
-                        System.out.println("Error: SQL error!");
+                        printError("SQL error");
                         waitForContinue();
                         break;
                     }
@@ -118,26 +97,58 @@ public class Main {
                     boolean deleted;
                     try{deleted = dao.delete(id);}
                     catch (SQLException e){
-                        System.out.println("Error: SQL error!");
+                        printError("SQL error");
                         waitForContinue();
                         break;
                     }
                     if(deleted)
                         System.out.println("Book deleted successfully");
                     else
-                        System.out.println("Error: Could not delete book!");
+                        printError("Could not delete book");
                     waitForContinue();
                     break;
                 }
                 case 5: {
                     System.out.println("Bye......");
-                    System.exit(0);
-                }
-                default: {
-                    System.out.println("Error: Wrong choice!");
-                    break;
+                    return;
                 }
             }
+        }
+    }
+
+    // Helper methods:
+    public static void printError(String error){
+        System.out.println("Error: " + error + "!");
+    }
+
+    public static void waitForContinue(){
+        System.out.print("Press Enter to continue....");
+        input.nextLine();
+    }
+
+    public static int readInt(String message) {
+        while (true) {
+            System.out.print(message);
+
+            try {
+                int value = input.nextInt();
+                input.nextLine();
+                return value;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                input.nextLine();
+            }
+        }
+    }
+
+    public static String readString(String message){
+        while(true){
+            System.out.print("Enter book's " + message + ": ");
+            String s = input.nextLine().trim();
+            if(s.isEmpty())
+                System.out.println("Error: " + message + " cannot be empty!");
+            else
+                return  s;
         }
     }
 }
