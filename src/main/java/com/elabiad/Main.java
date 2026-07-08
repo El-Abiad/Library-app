@@ -17,6 +17,7 @@ public class Main {
         BookDao dao = new BookDao();
 
         while(true){
+            clearScreen();
             System.out.println("""
                 
                 -------------------------
@@ -124,6 +125,7 @@ public class Main {
     public static void waitForContinue(){
         System.out.print("Press Enter to continue....");
         input.nextLine();
+        clearScreen();
     }
 
     public static int readInt(String message) {
@@ -150,5 +152,10 @@ public class Main {
             else
                 return  s;
         }
+    }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
