@@ -47,7 +47,7 @@ psql --version
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Library-app.git
+git clone https://github.com/El-Abiad/Library-app.git
 ```
 
 Go into the project directory:
@@ -138,10 +138,15 @@ This will automatically create all the required tables.
 Open:
 
 ```
+src/main/resources/db.properties.example
+```
+
+Rename the file to:
+```
 src/main/resources/db.properties
 ```
 
-Replace the placeholders with your PostgreSQL credentials.
+Then replace the placeholders with your PostgreSQL credentials.
 
 Example:
 
